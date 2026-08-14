@@ -1,0 +1,19 @@
+const products=[
+{id:'tomato-ketchup',name:'Tomato Ketchup Bottle',family:'Bottle',capacity:'1 KG',height:283.3,diameter:76.3,weight:'490±20 gms',finish:'Crown Beverage',neck:'Crown Finish',shape:'longBottle',accent:'#d71920'},
+{id:'fms-milk',name:'FMS Milk Bottle',family:'Bottle',capacity:'300 ML',height:96,diameter:63,weight:'175 gms',finish:'43 mm Lug Cap',neck:'Lug Finish',shape:'milkBottle',accent:'#566819'},
+{id:'salsa-300',name:'Salsa Jar',family:'Jar',capacity:'300 ML',height:92.5,diameter:67.4,weight:'195±10 gms',finish:'63 mm Lug Cap',neck:'Lug Finish',shape:'straightJar',accent:'#d71920'},
+{id:'matki-350',name:'Matki Jar',family:'Jar',capacity:'350 ML',height:110.5,diameter:78,weight:'145±10 gms',finish:'53 mm Lug Cap',neck:'Lug Finish',shape:'matki',accent:'#566819'},
+{id:'hexa-500',name:'Hexa Jar',family:'Faceted Jar',capacity:'500 ML',height:125.5,diameter:67.1,weight:'200±15 gms',finish:'63 mm Lug Cap',neck:'Lug Finish',shape:'hexa',accent:'#d71920'},
+{id:'square-coffee',name:'Square Coffee Jar',family:'Square Jar',capacity:'50 GM',height:118,diameter:54,weight:'175±10 gms',finish:'Lug Cap',neck:'Special Finish',shape:'square',accent:'#566819'},
+{id:'jam-28',name:'Jam Jar',family:'Low Jar',capacity:'28 GM',height:39,diameter:45,weight:'58±7 gms',finish:'43 mm Lug Cap',neck:'Lug Finish',shape:'lowJar',accent:'#d71920'},
+{id:'nurrish-2l',name:'Nurrish Old Jar',family:'Large Jar',capacity:'2 LITRE',height:211,diameter:108,weight:'665±25 gms',finish:'82 mm Lug Finish With Bead',neck:'Lug Finish',shape:'largeJar',accent:'#566819'},
+{id:'octa-750',name:'Octa Jar',family:'Faceted Jar',capacity:'750 ML',height:145,diameter:84,weight:'220±12 gms',finish:'70 mm Lug Cap',neck:'Lug Finish',shape:'octa',accent:'#d71920'}];
+let selected=products[0],rot=0,scale=1,tint='#eaf6ff';
+const $=id=>document.getElementById(id);const list=$('list'),model=$('model'),specs=$('specs');
+function shapeClass(p){return `glass ${p.shape}`}
+function renderList(){const q=$('search').value.toLowerCase();list.innerHTML='';products.filter(p=>`${p.name} ${p.capacity} ${p.family}`.toLowerCase().includes(q)).forEach(p=>{const b=document.createElement('button');b.className=p.id===selected.id?'active':'';b.innerHTML=`<span>${p.name}</span><b>${p.capacity}</b><small>${p.family}</small>`;b.onclick=()=>{selected=p;render()};list.appendChild(b)})}
+function renderCards(){cards.innerHTML='';products.slice(0,6).forEach(p=>{const b=document.createElement('button');b.innerHTML=`<span>⛶</span><b>${p.name}</b><em>${p.capacity}</em>`;b.onclick=()=>{selected=p;render()};cards.appendChild(b)})}
+function render(){title.textContent=selected.name;tag.textContent=selected.capacity;tag.style.background=selected.accent;model.className=shapeClass(selected);model.style.setProperty('--tint',tint);model.style.transform=`rotateY(${rot}deg) scale(${scale})`;heightLabel.textContent=`${selected.height} mm`;diameterLabel.textContent=`⌀ ${selected.diameter} mm`;specs.innerHTML='';[['Brimfull',selected.capacity],['Neck Finish',selected.neck],['Weight',selected.weight],['Height',`${selected.height} mm`],['Diameter',`${selected.diameter} mm`],['Finish Type',selected.finish],['Colour','Flint / Clear glass']].forEach(([k,v])=>specs.insertAdjacentHTML('beforeend',`<dt>${k}</dt><dd>${v}</dd>`));renderList();renderCards()}
+$('search').oninput=renderList;$('tint').oninput=e=>{tint=e.target.value;render()};$('toggleDrawing').onchange=e=>drawing.style.display=e.target.checked?'grid':'none';
+let drag=false,last=0;scene.onpointerdown=e=>{drag=true;last=e.clientX;scene.setPointerCapture(e.pointerId)};scene.onpointermove=e=>{if(!drag)return;rot+=e.clientX-last;last=e.clientX;model.style.transform=`rotateY(${rot}deg) scale(${scale})`};scene.onpointerup=()=>drag=false;scene.onwheel=e=>{e.preventDefault();scale=Math.min(1.35,Math.max(.75,scale-e.deltaY*.001));model.style.transform=`rotateY(${rot}deg) scale(${scale})`};
+render();
