@@ -1,0 +1,1 @@
+const fs=require('fs'),path=require('path');fs.rmSync('dist',{recursive:true,force:true});fs.mkdirSync('dist/src',{recursive:true});for(const f of ['index.html','src/main.js','src/styles.css'])fs.copyFileSync(f,path.join('dist',f));console.log('built static app to dist');
